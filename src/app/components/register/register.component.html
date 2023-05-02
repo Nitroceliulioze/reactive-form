@@ -13,19 +13,11 @@
             placeholder="First Name (required)"
             formControlName="firstName"
             [ngClass]="{
-              'is-invalid':
-                (registerForm.get('firstName')?.touched ||
-                  registerForm.get('firstName')?.dirty) &&
-                !registerForm.get('firstName')?.valid
+              'is-invalid': nameMessage
             }"
           />
           <span class="invalid-feedback">
-            <span *ngIf="registerForm.get('firstName')?.errors?.['required']">
-              Please enter your First Name.</span
-            >
-            <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']">
-              The First Name must be longer than 2 characters.</span
-            >
+            {{ nameMessage }}
           </span>
         </div>
       </div>
@@ -40,19 +32,11 @@
             placeholder="Surname (required)"
             formControlName="surname"
             [ngClass]="{
-              'is-invalid':
-                (registerForm.get('surname')?.touched ||
-                  registerForm.get('surname')?.dirty) &&
-                !registerForm.get('surname')?.valid
+              'is-invalid': surnameMessage
             }"
           />
           <span class="invalid-feedback">
-            <span *ngIf="registerForm.get('surname')?.errors?.['required']">
-              Please enter your Surname.</span
-            >
-            <span *ngIf="registerForm.get('surname')?.errors?.['minlength']">
-              The Surname must be longer than 2 characters.</span
-            >
+            {{ surnameMessage }}
           </span>
         </div>
       </div>
@@ -89,24 +73,16 @@
               placeholder="Confirm Email (required)"
               formControlName="confirmEmail"
               [ngClass]="{
-                'is-invalid':
-                  registerForm.get('emailGroup')?.errors ||
-                  ((registerForm.get('emailGroup.confirmEmail')?.touched ||
-                    registerForm.get('emailGroup.confirmEmail')?.dirty) &&
-                    !registerForm.get('emailGroup.confirmEmail')?.valid)
+                'is-invalid': confirmEmailMessage
               }"
             />
             <span class="invalid-feedback">
               <span
                 *ngIf="registerForm.get('emailGroup.confirmEmail')?.errors?.['required']"
               >
-                Please confirm your email.</span
+                Please confirm your email. </span
               >
-              <span
-                *ngIf="registerForm.get('emailGroup')?.errors?.['match']"
-              >
-                Emails do not match</span
-              >
+              {{ confirmEmailMessage }}
             </span>
           </div>
         </div>
@@ -123,23 +99,11 @@
               placeholder="Password (required)"
               formControlName="password"
               [ngClass]="{
-                'is-invalid': registerForm.get('passwordGroup')?.errors ||
-                  ((registerForm.get('passwordGroup.password')?.touched ||
-                    registerForm.get('passwordGroup.password')?.dirty) &&
-                  !registerForm.get('passwordGroup.password')?.valid)
+                'is-invalid': passwordMessage
               }"
             />
             <span class="invalid-feedback">
-              <span
-                *ngIf="registerForm.get('passwordGroup.password')?.errors?.['required']"
-              >
-                Please enter your Password.</span
-              >
-              <span
-                *ngIf="registerForm.get('passwordGroup.password')?.errors?.['minlength']"
-              >
-                The Password must be longer than 8 characters.</span
-              >
+             {{ passwordMessage }}
             </span>
           </div>
         </div>
@@ -156,23 +120,16 @@
               placeholder="Confirm Password (required)"
               formControlName="confirmPassword"
               [ngClass]="{
-                'is-invalid': registerForm.get('passwordGroup')?.errors ||
-                  ((registerForm.get('passwordGroup.confirmPassword')?.touched ||
-                    registerForm.get('passwordGroup.confirmPassword')?.dirty) &&
-                  !registerForm.get('passwordGroup.confirmPassword')?.valid)
+                'is-invalid': confirmPasswordMessage
               }"
             />
             <span class="invalid-feedback">
               <span
                 *ngIf="registerForm.get('passwordGroup.confirmPassword')?.errors?.['required']"
               >
-                Please confirm your Password.</span
+                Please confirm your Password. </span
               >
-              <span
-                *ngIf="registerForm.get('passwordGroup')?.errors?.['match']"
-              >
-                Passwords do not match.</span
-              >
+              {{ confirmPasswordMessage }}
             </span>
           </div>
         </div>
