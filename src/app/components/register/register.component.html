@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-body">
-    <form novalidate (ngSubmit)="save(registerForm)" #registerForm="ngForm">
+    <form novalidate (ngSubmit)="save()" [formGroup]="registerForm">
       <div class="form-group row mb-2">
         <label class="col-md-2 col-form-label" for="firstName"
           >First Name</label
@@ -11,22 +11,19 @@
             id="firstName"
             type="text"
             placeholder="First Name (required)"
-            required
-            minlength="2"
-            [(ngModel)]="user.firstName"
-            name="firstName"
-            #firstNameVar="ngModel"
+            formControlName="firstName"
             [ngClass]="{
               'is-invalid':
-                (firstNameVar.touched || firstNameVar.dirty) &&
-                !firstNameVar.valid
+                (registerForm.get('firstName')?.touched ||
+                  registerForm.get('firstName')?.dirty) &&
+                !registerForm.get('firstName')?.valid
             }"
           />
           <span class="invalid-feedback">
-            <span *ngIf="firstNameVar.errors?.['required']">
+            <span *ngIf="registerForm.get('firstName')?.errors?.['required']">
               Please enter your First Name.</span
             >
-            <span *ngIf="firstNameVar.errors?.['minlength']">
+            <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']">
               The First Name must be longer than 2 characters.</span
             >
           </span>
@@ -41,144 +38,143 @@
             id="surname"
             type="text"
             placeholder="Surname (required)"
-            required
-            minlength="2"
-            [(ngModel)]="user.surname"
-            name="surname"
-            #surnameVar="ngModel"
+            formControlName="surname"
             [ngClass]="{
               'is-invalid':
-                (surnameVar.touched || surnameVar.dirty) && !surnameVar.valid
+                (registerForm.get('surname')?.touched ||
+                  registerForm.get('surname')?.dirty) &&
+                !registerForm.get('surname')?.valid
             }"
           />
           <span class="invalid-feedback">
-            <span *ngIf="surnameVar.errors?.['required']">
+            <span *ngIf="registerForm.get('surname')?.errors?.['required']">
               Please enter your Surname.</span
             >
-            <span *ngIf="surnameVar.errors?.['minlength']">
+            <span *ngIf="registerForm.get('surname')?.errors?.['minlength']">
               The Surname must be longer than 2 characters.</span
             >
           </span>
         </div>
       </div>
 
-      <div class="form-group row mb-2">
-        <label class="col-md-2 col-form-label" for="email">Email</label>
-        <div class="col-md-8">
-          <input
-            class="form-control"
-            id="email"
-            type="email"
-            placeholder="Email (required)"
-            required
-            email
-            [(ngModel)]="user.email"
-            name="email"
-            #emailVar="ngModel"
-            [ngClass]="{
-              'is-invalid':
-                (emailVar.touched || emailVar.dirty) && !emailVar.valid
-            }"
-          />
-          <span class="invalid-feedback">
-            <span *ngIf="emailVar.errors?.['required']">
-              Please enter your email.</span
-            >
-            <span *ngIf="emailVar.errors?.['email']"> Enter valid email</span>
-          </span>
+      <div formGroupName="emailGroup">
+        <div class="form-group row mb-2">
+          <label class="col-md-2 col-form-label" for="email">Email</label>
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="email"
+              type="email"
+              placeholder="Email (required)"
+              formControlName="email"
+              [ngClass]="{
+                'is-invalid': emailMessage
+              }"
+            />
+            <span class="invalid-feedback">
+              {{ emailMessage }}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group row mb-2">
+          <label class="col-md-2 col-form-label" for="confirmEmail"
+            >Confirm Email</label
+          >
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="confirmEmail"
+              type="email"
+              placeholder="Confirm Email (required)"
+              formControlName="confirmEmail"
+              [ngClass]="{
+                'is-invalid':
+                  registerForm.get('emailGroup')?.errors ||
+                  ((registerForm.get('emailGroup.confirmEmail')?.touched ||
+                    registerForm.get('emailGroup.confirmEmail')?.dirty) &&
+                    !registerForm.get('emailGroup.confirmEmail')?.valid)
+              }"
+            />
+            <span class="invalid-feedback">
+              <span
+                *ngIf="registerForm.get('emailGroup.confirmEmail')?.errors?.['required']"
+              >
+                Please confirm your email.</span
+              >
+              <span
+                *ngIf="registerForm.get('emailGroup')?.errors?.['match']"
+              >
+                Emails do not match</span
+              >
+            </span>
+          </div>
         </div>
       </div>
 
-      <div class="form-group row mb-2">
-        <label class="col-md-2 col-form-label" for="confirmEmail"
-          >Confirm Email</label
-        >
-        <div class="col-md-8">
-          <input
-            class="form-control"
-            id="confirmEmail"
-            type="email"
-            placeholder="Confirm Email (required)"
-            required
-            email
-            [(ngModel)]="user.confirmEmail"
-            name="confirmEmail"
-            #confirmEmailVar="ngModel"
-            [ngClass]="{
-              'is-invalid':
-                (confirmEmailVar.touched || confirmEmailVar.dirty) &&
-                !confirmEmailVar.valid
-            }"
-          />
-          <span class="invalid-feedback">
-            <span *ngIf="confirmEmailVar.errors?.['required']">
-              Please confirm your email.</span
-            >
-            <span *ngIf="confirmEmailVar.errors?.['email']">
-              Enter valid email</span
-            >
-          </span>
+      <div formGroupName="passwordGroup">
+        <div class="form-group row mb-2">
+          <label class="col-md-2 col-form-label" for="password">Password</label>
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="password"
+              type="password"
+              placeholder="Password (required)"
+              formControlName="password"
+              [ngClass]="{
+                'is-invalid': registerForm.get('passwordGroup')?.errors ||
+                  ((registerForm.get('passwordGroup.password')?.touched ||
+                    registerForm.get('passwordGroup.password')?.dirty) &&
+                  !registerForm.get('passwordGroup.password')?.valid)
+              }"
+            />
+            <span class="invalid-feedback">
+              <span
+                *ngIf="registerForm.get('passwordGroup.password')?.errors?.['required']"
+              >
+                Please enter your Password.</span
+              >
+              <span
+                *ngIf="registerForm.get('passwordGroup.password')?.errors?.['minlength']"
+              >
+                The Password must be longer than 8 characters.</span
+              >
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div class="form-group row mb-2">
-        <label class="col-md-2 col-form-label" for="password">Password</label>
-        <div class="col-md-8">
-          <input
-            class="form-control"
-            id="password"
-            type="password"
-            placeholder="Password (required)"
-            required
-            minlength="8"
-            [(ngModel)]="user.password"
-            name="password"
-            #passwordVar="ngModel"
-            [ngClass]="{
-              'is-invalid':
-                (passwordVar.touched || passwordVar.dirty) && !passwordVar.valid
-            }"
-          />
-          <span class="invalid-feedback">
-            <span *ngIf="passwordVar.errors?.['required']">
-              Please enter your Password.</span
-            >
-            <span *ngIf="passwordVar.errors?.['minlength']">
-              The Password must be longer than 8 characters.</span
-            >
-          </span>
-        </div>
-      </div>
-
-      <div class="form-group row mb-2">
-        <label class="col-md-2 col-form-label" for="confirmPassword"
-          >Confirm Password</label
-        >
-        <div class="col-md-8">
-          <input
-            class="form-control"
-            id="confirmPassword"
-            type="password"
-            placeholder="Confirm Password (required)"
-            required
-            minlength="8"
-            [(ngModel)]="user.confirmPassword"
-            name="confirmPassword"
-            #confirmPasswordVar="ngModel"
-            [ngClass]="{
-              'is-invalid':
-                (confirmPasswordVar.touched || confirmPasswordVar.dirty) &&
-                !confirmPasswordVar.valid
-            }"
-          />
-          <span class="invalid-feedback">
-            <span *ngIf="confirmPasswordVar.errors?.['required']">
-              Please confirm your Password.</span
-            >
-            <span *ngIf="confirmPasswordVar.errors?.['minlength']">
-              The passwords do not match.</span
-            >
-          </span>
+        <div class="form-group row mb-2">
+          <label class="col-md-2 col-form-label" for="confirmPassword"
+            >Confirm Password</label
+          >
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm Password (required)"
+              formControlName="confirmPassword"
+              [ngClass]="{
+                'is-invalid': registerForm.get('passwordGroup')?.errors ||
+                  ((registerForm.get('passwordGroup.confirmPassword')?.touched ||
+                    registerForm.get('passwordGroup.confirmPassword')?.dirty) &&
+                  !registerForm.get('passwordGroup.confirmPassword')?.valid)
+              }"
+            />
+            <span class="invalid-feedback">
+              <span
+                *ngIf="registerForm.get('passwordGroup.confirmPassword')?.errors?.['required']"
+              >
+                Please confirm your Password.</span
+              >
+              <span
+                *ngIf="registerForm.get('passwordGroup')?.errors?.['match']"
+              >
+                Passwords do not match.</span
+              >
+            </span>
+          </div>
         </div>
       </div>
 
